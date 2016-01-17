@@ -45,4 +45,4 @@ function getRandomMinMax(min,max)
 </script>
 <button onclick="attaque()">Attaque</button>
 <button onclick="soigne()">Soigne</button>
-
+<img src ="http://static.mnium.org/images/contenu/actus/mmorpg/the_elder_scrolls_online/classes/chevalier_dragon/teso_dragonknight_01.jpg"/>

@@ -1,5 +1,4 @@
-
-	<style type="text/css">
+<style type="text/css">
 		body {
 			background: #000;
 		}
@@ -32,8 +31,8 @@
 	var ZONE_JEU_HEIGHT = 300;
 	var DIMENSION_BALLE = 8;
 	var VITESSE_BALLE = 2;
-	
-	
+    
+   
 	// Variables
 	var playerBarY; // Position en Y de la barre: Changement dynamique avec les touches du clavier
 	var playerBarX; // Position en X de la barre: Ne bougera pas.
@@ -42,9 +41,11 @@
 	var context;
 	var balleX = 100;
 	var balleY = 250;
-	var dirBalleX = 1; // vers la droite
-	var dirBalleY = -1; // vers le haut
+	var dirBalleX = -1; // vers la droite
+	var dirBalleY = 0; // vers le haut
 	var boucleJeu;
+    var score=0;
+	
   // il faudrait ajouter un score pour que cela ressemble à un jeu
 	
 	window.addEventListener('load', function () {
@@ -52,10 +53,10 @@
 	  context = document.getElementById('canvasElem').getContext('2d');
 	  
 	  // Initialisations des variables
-	  playerBarX = ? à droite ?
-	  playerBarY = ? au milieu ?
-	  computerBarX = ? à gauche ?
-	  computerBarY = ? au milieu ?
+	  playerBarX = (ZONE_JEU_WIDTH - BARRE_JEU_WIDTH);
+	  playerBarY = (ZONE_JEU_HEIGHT - BARRE_JEU_HEIGHT)/2;
+	  computerBarX =0;
+	  computerBarY =playerBarY;
 	  
     // il faudrait ajouter un score pour que cela ressemble à un jeu
 	  	  
@@ -71,7 +72,7 @@
 	function refreshGame() {
 		
 		// On efface la zone
-		context.clearRect(0, ZONE_JEU_WIDTH, 0, ZONE_JEU_HEIGHT);
+		context.clearRect(0, 0, ZONE_JEU_WIDTH, ZONE_JEU_HEIGHT);
 		
 		// Puis on réaffiche le nécessaire
 		
@@ -85,30 +86,30 @@
 			dirBalleY = 1;
 		}
                 
-                
-		/*if ( la balle est tombée de notre cote) {
-      perdu();
-    }
-		else if ( la balle est tombée du coté adverse){
-      gagne();
-    }*/
-		else if (mustRebond("left",computerBarX, computerBarY)){		   
-		   dirBalleX = 1;
-       // change un peu la direction en fonction de comment la balle touche la barre.
-		   dirBalleY= 2*(balleY-(computerBarY+BARRE_JEU_HEIGHT/2))/BARRE_JEU_HEIGHT;
-		}
-		else {
+	
+    	if (balleX>400) {
+      		perdu();
+    	}else if (balleX<0){
+      		gagne();
+    	}else if (mustRebond("left",computerBarX, computerBarY)){		   
+		   	dirBalleX = 1;
+       		// change un peu la direction en fonction de comment la balle touche la barre.
+		   	dirBalleY= 2*(balleY-(computerBarY+BARRE_JEU_HEIGHT/2))/BARRE_JEU_HEIGHT;
+		}else{
 		   if (mustRebond("rigth",playerBarX, playerBarY)) {
 		      dirBalleX = -1;
-          // change un peu la direction en fonction de comment la balle touche la barre.
+              score = score+1;
+        
+        	  // change un peu la direction en fonction de comment la balle touche la barre.
 		      dirBalleY= 2*(balleY-(playerBarY+BARRE_JEU_HEIGHT/2))/BARRE_JEU_HEIGHT;
 
-                      // Vu qu on a pas perdu la balle, on pourrait ajouter des points à notre score.
-		   }
+				// Vu qu on a pas perdu la balle, on pourrait ajouter des points à notre score.
+		   
+         	}
 		}
 		
-		// balleX = ? le nouveau X de la balle ?		
-		// balleY = ? le nouveau Y de la balle ?		
+		 balleX = balleX+VITESSE_BALLE*(dirBalleX);
+		 balleY = balleY+VITESSE_BALLE*(dirBalleY);		
 
     // la barre computer courre après la balle
 		computerBarY = calculComputerBarY();
@@ -132,17 +133,35 @@
 	}
 	
 	function deplacement(e) {
-		alert(e.keyCode);
-	}
+		//alert(e.keyCode);
+    if (e.keyCode==38)
+    {
+    	playerBarY=playerBarY-20;
+    }
+    if (e.keyCode==40)
+    {
+    	playerBarY=playerBarY+20;
+    }
+    if (playerBarY<0)
+    {
+    playerBarY=0;
+    }
+    if (playerBarY>220)
+    {
+    playerBarY=220;
+    }
+}
 
 	
 	function perdu() {
 		clearInterval(boucleJeu);
 		alert("Tu as perdu !");
+        alert("Tu as "+score+" points");
 	}
 	function gagne() {
 		clearInterval(boucleJeu);
 		alert("Bravo vous avez gagné !");
+        alert("Tu as "+score+" points"); 
 	}
 	
 
@@ -183,7 +202,7 @@
       }
       else if(computerBarY+(BARRE_JEU_HEIGHT/3) > balleY){  
 		      if ( ((computerBarY-PXL_DEPLA)) > 0 ) {
-		          computerBarY -= PXL_DEPLA;
+		          computerBarY -= PXL_DEPLA/4;
 		      }
       }
 	  	return computerBarY;

@@ -40,7 +40,7 @@
          //squareX =  getRandomMinMax(0,390/10)*10;
          //squareY =  getRandomMinMax(0,290/10)*10;
 	    // Puis on réaffiche le nécessaire
-        context.fillStyle = "#333333";
+        context.fillStyle = "Turquoise";
 		context.fillRect(squareX,squareY,SQUARE_WIDTH,SQUARE_HEIGHT);
        
        context.fillStyle = "Red";

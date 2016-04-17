@@ -1,0 +1,159 @@
+-<style type="text/css">
+	body {background: #000;}
+	#conteneur {width: 400px;height: 300px;border: 1px solid #333;
+    			margin: 0 auto;background: #FFF;text-align: center;}
+	h1 {text-align: center;font-variant: small-caps;color: #FFF;}
+	p {text-align: center;font-variant: small-caps;color: #FFF;}
+</style>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">
+	// Constantes du jeu
+
+	// Largeur du jeu
+	var ZONE_JEU_WIDTH = 400;
+	// Hauteur du jeu
+	var ZONE_JEU_HEIGHT = 300;
+    var SQUARE_WIDTH = 10;
+    var SQUARE_HEIGHT = 10;
+	// Variables
+	var context;
+	var boucleJeu;
+    var squareX =  getRandomMinMax(0,390/10)*10;
+    var squareY =  getRandomMinMax(0,290/10)*10;
+
+	var square = new carre (50,40);
+    var snake=new snake (square);
+    var score = 0;
+    
+	window.addEventListener('load', function () {
+	    // On récupère l'objet canvas pour dessiner dedans
+	    context = document.getElementById('canvasElem').getContext('2d');
+
+	    // Boucle de rafraichissement du contexte 2D
+	    boucleJeu = setInterval(refreshGame, 100);
+        window.document.onkeydown = deplacement;
+	}, false);
+
+
+	function refreshGame() {
+
+                 snake.draw();
+
+		// On efface la zone
+	    context.clearRect(0, 0, ZONE_JEU_WIDTH, ZONE_JEU_HEIGHT);
+         //squareX =  getRandomMinMax(0,390/10)*10;
+         //squareY =  getRandomMinMax(0,290/10)*10;
+	    // Puis on réaffiche le nécessaire
+        context.fillStyle = "Turquoise";
+		context.fillRect(squareX,squareY,SQUARE_WIDTH,SQUARE_HEIGHT);
+       
+       if (square.x==squareX && square.y==squareY)
+       {
+       squareX =  getRandomMinMax(0,390/10)*10;
+       squareY =  getRandomMinMax(0,290/10)*10;
+       score=score+1;
+       //alert("Tu as "+score+" de score");
+       
+       }
+       square.draw();
+       
+	}
+    
+    function getRandomMinMax(min,max) 
+{
+    return Math.floor (Math.random()*(max-min)) + min;
+}
+
+	function carre(x,y,next){
+		this.x=x;
+		this.y=y;
+        this.next=next
+		this.draw=function(){
+    	    context.fillStyle = "red";
+			context.fillRect(this.x,this.y,SQUARE_WIDTH,SQUARE_HEIGHT);
+            }
+        this.move = function(x,y){
+        	this.next.move(this.x,this.y);
+            this.x=X;
+            this.y=Y;
+        }
+	}
+    
+    function snake(head){
+    	this.head=head;
+	    this.draw=function(){
+		    var body = head;
+		    //head.draw();
+            //head.next.draw();
+            body.draw();
+            while(body.next) {
+                 body=body.next;
+                 body.draw();
+            }
+    	}
+        
+
+
+
+function deplacement(e) {
+	//alert(e.keyCode);
+    if (e.keyCode==38)
+    {
+    	square.y=square.y-10;
+    }
+    if (e.keyCode==40)
+    {
+    	square.y=square.y+10;
+    }
+    if (e.keyCode==39)
+    {
+       square.x=square.x+10;
+    }
+    if (e.keyCode==37)
+    {
+       square.x=square.x-10;
+    }
+    if (square.y<0)
+    {
+    //snakeY=0;
+    	alert("Tu as perdu et tu as "+score+""); 
+    	square.x = 10;
+    	square.y = 10;
+    	score =  0;
+    }
+    if (square.y>290)
+    {
+    //snakeY=290;
+	    alert("Tu as perdu et tu as "+score+"");
+    	square.x = 10;
+	    square.y = 10;
+    	score =  0;
+    }
+    if (square.x<0)
+    {
+    //snakeX=0;
+	    alert("Tu as perdu et tu as "+score+"");
+    	square.x = 10;
+	    square.y = 10;
+    	score =  0;
+    }
+    if (square.x>390)
+    {
+	    //snakeX=390;
+    	alert("Tu as perdu et tu as "+score+"");
+	    square.x = 10;
+    	square.y = 10;
+	    score =  0;
+    }
+}
+
+
+        
+</script>
+
+<h1>Jeu</h1>
+<div id="conteneur">
+	<canvas id="canvasElem" width="400" height="300">
+		Votre navigateur ne supporte pas la fonctionnalité Canvas.
+	</canvas>
+</div>
